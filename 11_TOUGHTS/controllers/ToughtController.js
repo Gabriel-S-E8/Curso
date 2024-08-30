@@ -1,9 +1,47 @@
 const Tought = require('../models/Tought');
 const User = require('../models/User');
 
+const { Op } = require('sequelize')
+
+
+
 module.exports = class ToughtController {
   static async showToughts(req, res) {
-    res.render('toughts/home');
+
+    let search = ''
+
+    if (req.query.search) {
+      search = req.query.search
+    }
+
+    let order = 'DESC'
+
+    if (req.query.order === 'old') {
+      order = 'ASC'
+
+    }else{
+      order = 'DESC'
+    }
+
+
+    const toughts = await Tought.findAll({
+      include: User,
+      where:{
+        title: { [Op.like]: `%${search}%`}
+      },
+      raw: true,
+      nest: true,
+      order:[['createdAt', order]]
+  });
+
+  let toughtsQty = toughts.length
+
+  if (toughtsQty === 0) {
+    toughtsQty = false
+  }
+
+  res.render('toughts/home', { toughts, search, toughtsQty});
+
   }
 
   static async dashboard(req, res) {
@@ -27,10 +65,10 @@ module.exports = class ToughtController {
     let emptyToughts = false
 
     if (toughts.length === 0) {
-        emptyToughts = true;
+      emptyToughts = true;
     }
 
-    res.render('toughts/dashboard', { toughts });
+    res.render('toughts/dashboard', { toughts, emptyToughts });
   }
 
   static createTought(req, res) {
@@ -71,4 +109,38 @@ module.exports = class ToughtController {
       console.log('Aconteceu um erro' + err);
     }
   }
+
+  static async updateTought(req, res) {
+    const id = req.params.id
+
+    await Tought.findOne({ where: { id: id }, raw: true })
+      .then((tought) => {
+        res.render('toughts/edit', { tought })
+      })
+      .catch((err) => console.log())
+  }
+
+  static async updateToughtSave(req, res) {
+    const id = req.body.id;
+
+    const tought = {
+      title: req.body.title,
+    };
+
+    try {
+      await Tought.update(tought, { where: { id: id } });
+
+      req.flash('message', 'Pensamento Editado com sucesso');
+
+      req.session.save(() => {
+        res.redirect('/toughts/dashboard');
+      });
+    } catch (err) {
+      console.log('Aconteceu um erro' + err);
+    }
+
+  }
+
+
+
 };
