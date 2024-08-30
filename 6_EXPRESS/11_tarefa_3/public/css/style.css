@@ -1,0 +1,99 @@
+body {
+    padding: 0;
+    margin: 0;
+    background-color: #f2a9a9;
+    color: #2c2c2c;
+    text-align: center;
+    font-size: 2em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#main-container {
+    line-height: 75px;
+    flex-direction: column;
+    border: solid 10px #e7a6a6;
+    border-radius: 3px;
+    box-shadow: 3px 3px 10px #545353;
+    margin-top: 2em;
+    width: 1000px;
+    height: 400px;
+    background-color: #f0c9c9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#main-container > * {
+    padding: 0;
+    margin: 0;
+    font-size: 1.5em;
+}
+
+a {
+    position: relative;
+    text-decoration: none;
+    color: #434242;
+    transition: 1s;
+}
+
+#link-style {
+    top: 30px;
+}
+
+#link-style > * {
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+#link-style:hover #underline-back {
+    color: #6e6b6b;
+    width: 170px;
+    margin-left: -30px;
+}
+
+#underline-back, #underline-git, #underline-main {
+    transition: width 1s, margin-left 1s;
+    border-bottom: 2px solid #262525;
+    width: 0;
+    margin-top: -7.5px;
+}
+
+#underline-main{
+    margin-left: 77px;
+}
+
+#underline-back{
+    margin-left: 45px;
+}
+
+#underline-git{
+    margin-left: 260px;
+}
+
+#link-git:hover #underline-git {
+    width: 550px;
+    margin-left: 0;
+}
+
+#link-style:hover #underline-main {
+    width: 160px;
+    margin-left: 0;
+}
+
+.underline:hover {
+    width: 160px;
+    margin-left: -30px;
+}
+
+.back-style::before {
+    position: absolute;
+    left: -28px;
+    top: 5px;
+    content: "⤾"; 
+}
+
+#link-git:hover {
+    margin-top: 10px;
+}
