@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const createUserToken = require('../helpers/create-user-token');
 const getToken = require('../helpers/get-token');
 const getUserByToken = require('../helpers/get-user-by-token');
-const { imageUpload } = require('../helpers/image-upload')
+const { imageUpload } = require('../helpers/image-upload');
 
 module.exports = class UserController {
 	static async register(req, res) {
@@ -138,17 +138,11 @@ module.exports = class UserController {
 
 	static async editUser(req, res) {
 		const id = req.params.id;
-		const { name, email, phone, password, confirmpassword} = req.body;
+		const { name, email, phone, password, confirmpassword } = req.body;
 
-		
-
-		
-		 
 		// check if user exists
 		const token = getToken(req);
 		const user = await getUserByToken(token);
-
-
 
 		if (!user) {
 			res.status(422).json({
@@ -211,7 +205,7 @@ module.exports = class UserController {
 
 			res.status(200).json({
 				message: 'User updated',
-				user
+				user,
 			});
 		} catch (err) {
 			res.status(500).json({ message: err });

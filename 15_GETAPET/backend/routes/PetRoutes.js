@@ -4,7 +4,6 @@ const PetController = require('../controllers/PetController');
 // middleware
 const verifyToken = require('../helpers/verify-token');
 
+router.post('/create', verifyToken, PetController.create);
 
-router.post('/create', verifyToken,PetController.create)
-
-module.exports = router
+module.exports = router;
