@@ -1,7 +1,7 @@
 module.exports = {
   printWidth: 80, // Largura máxima da linha
   tabWidth: 2, // Número de espaços por tabulação
-  useTabs: true, // Usa espaços em vez de tabulações
+  useTabs: false, // Usa espaços em vez de tabulações
   semi: true, // Adiciona ponto e vírgula no final das declarações
   singleQuote: true, // Usa aspas simples em vez de aspas duplas
   trailingComma: 'es5', // Adiciona vírgula no final de objetos e arrays (ES5)
