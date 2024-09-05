@@ -14,32 +14,31 @@ module.exports = class UserController {
 
 		//Validations
 		if (!name) {
-			res.status(422).json({ message: 'O nome é obrigatorio' });
+			return res.status(422).json({ message: 'O nome é obrigatorio' });
 		}
 		if (!email) {
-			res.status(422).json({ message: 'O email é obrigatorio' });
+			return res.status(422).json({ message: 'O email é obrigatorio' });
 		}
 		if (!password) {
-			res.status(422).json({ message: 'A senha é obrigatorio' });
+			return res.status(422).json({ message: 'A senha é obrigatorio' });
 		}
 		if (!phone) {
-			res.status(422).json({ message: 'O telefone é obrigatorio' });
+			return res.status(422).json({ message: 'O telefone é obrigatorio' });
 		}
 		if (!confirmpassword) {
-			res.status(422).json({ message: 'A confirmação de senha é obrigatorio' });
+			return res.status(422).json({ message: 'A confirmação de senha é obrigatorio' });
 		}
 
 		if (password !== confirmpassword) {
-			res.status(422).json({ message: 'As senhas não coincidem' });
-			return;
+			return res.status(422).json({ message: 'As senhas não coincidem' });
+
 		}
 
 		//check if user exists
 		const userExists = await User.findOne({ email: email });
 
 		if (userExists) {
-			res.status(422).json({ message: 'Este email já está cadastrado' });
-			return;
+			return res.status(422).json({ message: 'Este email já está cadastrado' });
 		}
 
 		// create a password
@@ -73,28 +72,28 @@ module.exports = class UserController {
 		const { email, password } = req.body;
 
 		if (!email) {
-			res.status(422).json({ message: 'O email é obrigatório' });
+			return res.status(422).json({ message: 'O email é obrigatório' });
 		}
 		if (!password) {
-			res.status(422).json({ message: 'A senha é obrigatória' });
+			return res.status(422).json({ message: 'A senha é obrigatória' });
 		}
 
 		//check if user exists
 		const user = await User.findOne({ email: email });
 
 		if (!user) {
-			res.status(422).json({ message: 'E-mail não cadastrado' });
-			return;
+			return res.status(422).json({ message: 'E-mail não cadastrado' });
+			
 		}
 
 		// check if password match with db password
 		const match = await bcrypt.compare(password, user.password);
 
 		if (!match) {
-			res.status(422).json({
+			return res.status(422).json({
 				message: 'Senha inválida',
 			});
-			return;
+			
 		}
 
 		await createUserToken(user, req, res);
@@ -103,7 +102,6 @@ module.exports = class UserController {
 	static async checkUser(req, res) {
 		let currentUser;
 
-		console.log(req.headers.authorization);
 
 		if (req.headers.authorization) {
 			const token = getToken(req);
