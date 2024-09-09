@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // component
 import Navbar from './components/layouts/Navbar';
@@ -30,35 +30,17 @@ function App() {
         <Navbar />
         <Message />
         <Container>
-          <Switch>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/register">
-              <Register />
-            </Route>
-            <Route path="/user/profile">
-              <Profile />
-            </Route>
-            <Route path="/pets/dashboard">
-              <Dashboard/>
-            </Route>
-            <Route path="/pets/add">
-              <AddPet/>
-            </Route>
-            <Route path="/pets/edit/:id">
-              <EditPet/>
-            </Route>
-            <Route path="/pets/adoptions">
-              <MyAdoptions/>
-            </Route>
-            <Route path="/pets/:id">
-              <PetDetails/>
-            </Route>
-            <Route path="/">
-              <Home />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route path="/login" element={<Login />}/>
+            <Route path="/register" element={<Register />}/>
+            <Route path="/user/profile" element={<Profile />} />
+            <Route path="/pets/dashboard" element={<Dashboard />}/>
+            <Route path="/pets/add" element={<AddPet />} />
+            <Route path="/pets/edit/:id" element={<EditPet />}/>
+            <Route path="/pets/adoptions" element={<MyAdoptions/>}/>
+            <Route path="/pets/:id" element={<PetDetails/>} />
+            <Route path="/" element={<Home/>}/>
+          </Routes>
         </Container>
         <Footer />
       </UserProvider>
