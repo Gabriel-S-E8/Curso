@@ -1,64 +1,83 @@
+// Importação de módulos necessários
 import api from "../../../utils/api";
 import styles from "./addPet.module.css";
 
+// Importação de hooks do React
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-// hooks
+// Importação do hook para exibição de mensagens
 import useFlashMessage from "../../../hooks/useFlashMessage";
 
-//components
+// Importação do componente de formulário de pet
 import PetForm from "../../form/petForm";
 
+// Definição do componente de cadastro de pet
 function AddPet() {
-    const [token] = useState(localStorage.getItem('token') || '')
-    const { setFlashMessage } = useFlashMessage()
-    const navigate = useNavigate()
+    // Obtenção do token de autenticação do local storage
+    const [token] = useState(localStorage.getItem("token") || "");
 
+    // Instanciação do hook para exibição de mensagens
+    const { setFlashMessage } = useFlashMessage();
+
+    // Instanciação do hook para navegação
+    const navigate = useNavigate();
+
+    // Função para cadastrar um pet
     async function registerPet(pet) {
-        let msgType = 'success'
+        let msgType = "success";
 
-        const formData = new FormData()
+        // Criação de uma instância de FormData para envio de arquivos
+        const formData = new FormData();
 
+        // Iteração sobre as chaves do objeto pet para adicioná-las ao FormData
         await Object.keys(pet).forEach((key) => {
-            if (key === 'images') {
+            if (key === "images") {
+                // Adição de múltiplas imagens ao FormData
                 for (let i = 0; i < pet[key].length; i++) {
-                    formData.append('images', pet[key][i]) 
+                    formData.append("images", pet[key][i]);
                 }
-            } else{
-                formData.append(key, pet[key])
+            } else {
+                formData.append(key, pet[key]);
             }
-        })
+        });
 
-        const data = await api.post('pets/create', formData, {
-            Authorization : `Bearer ${JSON.parse(token)}`,
-            'Content-Type': 'multipart/form-data'
-        })
-        .then((response) => {
-            return response.data
-        })
-        .catch((err) => {
-            msgType = 'error'
-            return err.response.data
-        })
+        // Requisição de post para cadastrar o pet
+        const data = await api
+            .post("pets/create", formData, {
+                headers: {
+                    Authorization: `Bearer ${JSON.parse(token)}`,
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+            .then((response) => {
+                return response.data;
+            })
+            .catch((err) => {
+                msgType = "error";
+                return err.response.data;
+            });
 
-        setFlashMessage(data.message, msgType)
-        
-        if (msgType !== 'error') {
-            navigate('/pets/dashboard')
+        // Exibição da mensagem de sucesso ou erro com base no resultado da requisição
+        setFlashMessage(data.message, msgType);
+
+        // Redirecionamento para a página de dashboard de pets se a requisição for bem-sucedida
+        if (msgType !== "error") {
+            navigate("/pets/dashboard");
         }
     }
 
-
-   return (
-      <section className={styles.addpet_header}>
-         <div>
-            <h1>Cadastre um Pet</h1>
-            <p>Depois ele ficara disponivel para adoção</p>
-         </div>
-         <PetForm handleSubmit={registerPet} btnText="Cadastrar" />
-      </section>
-   );
+    // Renderização do componente de cadastro de pet
+    return (
+        <section className={styles.addpet_header}>
+            <div>
+                <h1>Cadastre um Pet</h1>
+                <p>Depois ele ficara disponivel para adoção</p>
+            </div>
+            <PetForm handleSubmit={registerPet} btnText="Cadastrar" />
+        </section>
+    );
 }
 
+// Exportação do componente de cadastro de pet
 export default AddPet;
